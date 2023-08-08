@@ -15,16 +15,30 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('username')->unique();
             $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+        });
+
+        Schema::create('followers', function (Blueprint $table) {
+            $table->id();
+            $table->integer('followed_id');
+            $table->integer('following_id');
+        });
+
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->string('image_url');
+            $table->integer('user_id');
+        });
+
+        Schema::create('likes', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
+            $table->integer('post_id');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+
     public function down(): void
     {
         Schema::dropIfExists('users');
