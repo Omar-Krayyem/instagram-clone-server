@@ -14,6 +14,10 @@ class Follower extends Model
     public $timestamps = false;
 
     public function follow(){
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsToMany(User::class,'followed_id');
+    }
+
+    public function isFollowing($user) {
+        return $this->follow->contains($user);
     }
 }
