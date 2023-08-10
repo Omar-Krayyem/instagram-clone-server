@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Follower;
 use App\Models\User;
 use Exception;
-
+use Psy\Readline\Hoa\Console;
 
 class AccountController extends Controller
 {
@@ -15,6 +15,16 @@ class AccountController extends Controller
         try{    
             $user = Auth::user();
             return $this->customResponse($user);
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }
+    }
+    
+    public function deleteFollowing($userId){
+        try{
+            $user = Auth::user();
+            $ufollow = Follower::where('followed_id', $userId)->where('following_id', $user->id)->first()->delete();
+            return $this->customResponse($ufollow , 'unfollow this user');
         }catch(Exception $e){
             return self::customResponse($e->getMessage(),'error',500);
         }
@@ -53,9 +63,10 @@ class AccountController extends Controller
     public function getFollowing() {
         try{
             $user = Auth::user();
-            $following = $user->follow;
+            
+            $followings = $user->followers;
 
-            return $this->customResponse($following);
+            return $this->customResponse($followings);
         }catch(Exception $e){
             return self::customResponse($e->getMessage(),'error',500);
         }    

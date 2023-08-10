@@ -13,8 +13,8 @@ class Follower extends Model
 
     public $timestamps = false;
 
-    public function follow(){
-        return $this->belongsToMany(User::class,'followed_id');
+    public function user(){
+        return $this->belongsTo(User::class,'followed_id');
     }
 
     public function isFollowing($user) {

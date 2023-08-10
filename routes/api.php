@@ -5,11 +5,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AccountController;
 
-Route::group(['middleware' => ['jwt.auth']], function () {
+Route::group(['middleware' => ['auth:api']], function () {
 
     Route::get("/user", [AccountController::class, 'getUser']);
-    Route::get("/toggle-follow/{userId}", [AccountController::class, "follow"]);
     Route::get('/user/followers', [AccountController::class, 'getFollowers']);
+    Route::delete("/user/following/{userId}", [AccountController::class, "deleteFollowing"]);
+    Route::get("/toggle-follow/{userId}", [AccountController::class, "follow"]);
     Route::get('/user/following', [AccountController::class, 'getFollowing']);
     Route::get('/search-users/{searchItem}', [AccountController::class, 'searchUsers']);
     
@@ -26,6 +27,6 @@ Route::controller(AuthController::class)->group(function () {
 
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
