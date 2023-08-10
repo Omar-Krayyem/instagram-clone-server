@@ -10,7 +10,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get("/user", [AccountController::class, 'getUser']);
     Route::get('/user/followers', [AccountController::class, 'getFollowers']);
     Route::delete("/user/following/{userId}", [AccountController::class, "deleteFollowing"]);
-    Route::get("/toggle-follow/{userId}", [AccountController::class, "follow"]);
+    Route::get("/follow/{userId}", [AccountController::class, "follow"]);
     Route::get('/user/following', [AccountController::class, 'getFollowing']);
     Route::get('/search-users/{searchItem}', [AccountController::class, 'searchUsers']);
     

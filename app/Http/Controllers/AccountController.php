@@ -30,13 +30,25 @@ class AccountController extends Controller
         }
     }
 
+    public function getFollowing() {
+        try{
+            $user = Auth::user();
+            
+            $followings = $user->followers;
+
+            return $this->customResponse($followings);
+        }catch(Exception $e){
+            return self::customResponse($e->getMessage(),'error',500);
+        }    
+    }
+
     public function follow($userId) {
         try{    
             $user = Auth::user();
             $isFollowed = Follower::where('followed_id', $user->id)->where('following_id', $userId)->first();
             if($isFollowed) {
-                $ufollow = Follower::where('followed_id', $user->id)->where('following_id', $userId)->first()->delete();
-                return $this->customResponse($ufollow , 'unfollow this user');
+                $isFollowed->delete();
+                return $this->customResponse($isFollowed , 'unfollow this user');
             } else {
                 $follow = Follower::create([
                     'follower_id' => $user->id,
@@ -60,23 +72,11 @@ class AccountController extends Controller
         }        
     }
 
-    public function getFollowing() {
-        try{
-            $user = Auth::user();
-            
-            $followings = $user->followers;
-
-            return $this->customResponse($followings);
-        }catch(Exception $e){
-            return self::customResponse($e->getMessage(),'error',500);
-        }    
-    }
-
     public function searchUsers($searchItem) {
         try{
             $main_user = Auth::user();
 
-            $users = Follower::where('username', 'LIKE', "%$searchItem%")->get();
+            $users = User::where('username', 'LIKE', "%$searchItem%")->get();
 
             return $this->customResponse($users);
         }catch(Exception $e){
